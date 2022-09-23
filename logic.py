@@ -64,14 +64,14 @@ def login(db, creds):
 #     )
 #     return crud.get_object_list(db, models.Auction)
 
-def create_auction(db, body):
-    db_token = _existing_token_and_active(db, body.token)
-    db_user = crud.get_object_or_none(
-        db, models.User, filters={"id": db_token.userid}
-    )
-    if not db_user:
-        raise errors.JsonException(errors.USER_NOT_FOUND, code=404)
-    data = body.dict()
-    data["seller_id"] = db_user.seller_id
-    # push in #
-    return
+# def create_auction(db, body):
+#     db_token = _existing_token_and_active(db, body.token)
+#     db_user = crud.get_object_or_none(
+#         db, models.User, filters={"id": db_token.userid}
+#     )
+#     if not db_user:
+#         raise errors.JsonException(errors.USER_NOT_FOUND, code=404)
+#     data = body.dict()
+#     data["seller_id"] = db_user.seller_id
+#     # push in #
+#     return
