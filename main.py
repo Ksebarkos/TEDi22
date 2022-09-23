@@ -57,11 +57,11 @@ def get_auctions(
     return logic.get_auctions(db, token)  # , page)
 
 
-@app.post("/register-auction/", response_model=schema.LoginToken)
-def create_auction(
-    body: schema.AuctionCreate, db: Session = Depends(get_db),
-):
-    return logic.create_auction(db, body)
+# @app.post("/register-auction/", response_model=schema.LoginToken)
+# def create_auction(
+#     body: schema.AuctionCreate, db: Session = Depends(get_db),
+# ):
+#     return logic.create_auction(db, body)
 
 
 if __name__ == '__main__':
