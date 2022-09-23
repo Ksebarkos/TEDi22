@@ -54,18 +54,18 @@ class GetAuction(BaseModel):
     page: int
 
 
-class AuctionCreate(BaseModel):
-    token: str
-    name: str
-    category: list
-    currently = 0.0
-    buy_price: float
-    first_bid = 0.0
-    number_of_bids = 0
-    location: str
-    country: str
-    position: str
-    started: datetime.datetime = "0000-00-00[T]00:00"  # YYYY-MM-DD[T]HH:MM
-    ends: datetime.datetime = "0000-00-00[T]00:00"
-    description: str
-    photo: list
+# class AuctionCreate(BaseModel):
+#     token: str
+#     name: str
+#     category: list
+#     currently = 0.0
+#     buy_price: float
+#     first_bid = 0.0
+#     number_of_bids = 0
+#     location: str
+#     country: str
+#     position: str
+#     started: datetime.datetime = "0000-00-00[T]00:00"  # YYYY-MM-DD[T]HH:MM
+#     ends: datetime.datetime = "0000-00-00[T]00:00"
+#     description: str
+#     photo: list
