@@ -11,24 +11,6 @@ auction_category = Table(
     Column('category_id', Integer, ForeignKey('Categories.id'))
 )
 
-auction_bid = Table(
-    'auction_bid', Base.metadata,
-    Column('auction_id', Integer, ForeignKey('Auctions.id')),
-    Column('bid_id', Integer, ForeignKey('Bids.id'))
-)
-
-# auction_location = Table(
-#     'auction_location', Base.metadata,
-#     Column('auction_id', Integer, ForeignKey('Auction.id')),
-#     Column('Location_id', Integer, ForeignKey('Location.id'))
-# )
-#
-# user_location = Table(
-#     'auction_location', Base.metadata,
-#     Column('auction_id', Integer, ForeignKey('Auction.id')),
-#     Column('Location_id', Integer, ForeignKey('Location.id'))
-# )
-
 
 class User(Base):
     __tablename__ = "Users"
@@ -47,8 +29,6 @@ class User(Base):
     bidder_rating = Column(Float, nullable=True)
     location = Column(String, nullable=False)
     country = Column(String, nullable=False)
-    # location_id = Column(Integer, ForeignKey("Locations.id"), nullable=False)
-    # location = relationship("Location")
 
 
 class TokenSession(Base):
@@ -65,22 +45,27 @@ class Auction(Base):
     __tablename__ = "Auctions"
 
     id = Column(Integer, primary_key=True, index=True)
-    Name = Column(String, nullable=False)
+    name = Column(String, nullable=False)
     currently = Column(Float, nullable=False)
     buy_price = Column(Float, nullable=False)
     first_bid = Column(Float, nullable=False)
     number_of_bids = Column(Float, nullable=False)
-    started = Column(DateTime(timezone=True), nullable=False)
+    start = Column(DateTime(timezone=True), nullable=False)
     ends = Column(DateTime(timezone=True), nullable=False)
     description = Column(String, nullable=True)
     seller_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
     seller = relationship("User")
-    location_id = Column(Integer, ForeignKey("Locations.id"), nullable=False)
-    location = relationship("Location")
+    location = Column(String, nullable=True)
+    country = Column(String, nullable=True)
+    longtitude = Column(String, nullable=False)
+    latitude = Column(String, nullable=False)
+    normalised_description = Column(String, nullable=False)
 
     categories = relationship("Category", secondary=auction_category)
 
-    bids = relationship("Bid", secondary=auction_bid)
+    photos = relationship("Photo")
+
+    bids = relationship("Bid")
 
 
 class Category(Base):
@@ -92,14 +77,25 @@ class Category(Base):
     auctions = relationship("Auction", secondary=auction_category)
 
 
+class Photo(Base):
+    __tablename__ = "Photos"
+
+    id = Column(Integer, primary_key=True, index=True)
+    URL = Column(String, nullable=False)
+    auction_id = Column(Integer, ForeignKey("Auctions.id"), nullable=False)
+    auction = relationship("Auction")
+
+
 class Bid(Base):
     __tablename__ = "Bids"
 
     id = Column(Integer, primary_key=True, index=True)
+    auction_id = Column(Integer, ForeignKey("Auctions.id"), nullable=False)
+    auction = relationship("Auction")
     bidder_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
     bidder = relationship("User")
     time = Column(DateTime(timezone=True), nullable=False)
-    amount = Column(Integer, nullable=False)
+    amount = Column(Float, nullable=False)
 
 
 class Location(Base):
@@ -110,3 +106,17 @@ class Location(Base):
     longtitude = Column(Float, nullable=False)
     Address = Column(String, nullable=False)
     Country = Column(String, nullable=False)
+
+
+class Message(Base):
+    __tablename__ = "Messages"
+
+    id = Column(Integer, primary_key=True, index=True)
+    sender_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
+    sender = relationship("User", foreign_keys=[sender_id])
+    receiver_id = Column(Integer, ForeignKey("Users.id"), nullable=False)
+    receiver = relationship("User", foreign_keys=[receiver_id])
+    message = Column(String, nullable=False)
+    read = Column(Boolean, nullable=False)
+    auction_id = Column(Integer, ForeignKey("Auctions.id"), nullable=False)
+    auction = relationship("Auction")
